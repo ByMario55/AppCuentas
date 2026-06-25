@@ -282,18 +282,8 @@
   </div>
 
   <div class="section">
-    <div class="section-header"><div class="section-title">Gastos recurrentes</div></div>
-    <div class="card" id="recurring-overview"></div>
-  </div>
-
-  <div class="section">
     <div class="section-header"><div class="section-title">Presupuesto</div></div>
     <div class="card" id="budget-overview"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-header"><div class="section-title">Últimos movimientos</div></div>
-    <div class="card" id="recent-transactions"></div>
   </div>
 </div>
 
@@ -864,17 +854,37 @@ function renderCatChart(byCat) {
   const values = cats.map(c => byCat[c]);
   const total  = values.reduce((a,b)=>a+b,0);
   const clrs   = cats.map((_,i)=>COLORS[i%COLORS.length]);
+  const centerTextPlugin = {
+    id: 'centerText',
+    beforeDraw(chart) {
+      const { ctx, chartArea: { top, bottom, left, right } } = chart;
+      const cx = (left + right) / 2;
+      const cy = (top + bottom) / 2;
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#888';
+      ctx.font = '11px -apple-system, sans-serif';
+      ctx.fillText('TOTAL', cx, cy - 14);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 18px -apple-system, sans-serif';
+      ctx.fillText(fmtAmt(total), cx, cy + 6);
+      ctx.restore();
+    }
+  };
+
   if (chartCat) chartCat.destroy();
   chartCat = new Chart(document.getElementById('chart-category'),{
     type:'doughnut',
     data:{ labels:cats, datasets:[{data:values,backgroundColor:clrs,borderWidth:0,hoverOffset:6}] },
     options:{
-      responsive:true, maintainAspectRatio:false, cutout:'60%',
+      responsive:true, maintainAspectRatio:false, cutout:'62%',
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:ctx=>{const p=Math.round(ctx.raw/total*100);return ` ${ctx.label}: ${fmtAmt(ctx.raw)} (${p}%)`;} }}
       }
-    }
+    },
+    plugins: [centerTextPlugin]
   });
   document.getElementById('chart-category-legend').innerHTML =
     cats.map((c,i)=>{const p=Math.round(values[i]/total*100);
