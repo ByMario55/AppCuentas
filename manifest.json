@@ -2,7 +2,7 @@
   "name": "Mis Finanzas",
   "short_name": "Finanzas",
   "description": "Control personal de ingresos y gastos",
-  "start_url": "/",
+  "start_url": "/AppCuentas/",
   "display": "standalone",
   "background_color": "#6c5ce7",
   "theme_color": "#6c5ce7",
