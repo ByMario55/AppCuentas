@@ -700,9 +700,7 @@ function renderInicio() {
   const nominaNote = document.getElementById('nomina-note');
   nominaNote.textContent = D.nomina > 0 ? `Nómina ${fmtAmt(D.nomina)} incluida` : '';
 
-  renderRecurringOverview(ym);
   renderBudgetOverview(s.byCat);
-  renderRecent();
 }
 
 function renderRecurringOverview(ym) {
